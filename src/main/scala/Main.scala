@@ -1,5 +1,5 @@
 import org.apache.hadoop.fs.{FileSystem, Path}
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
@@ -52,8 +52,6 @@ object Main {
       .getOrCreate()
 
     implicit val sparkContext = spark.sparkContext
-
-
 
     saveWithOverwrite(algorithm1(rddFromFile), "src/main/resources/algorithm1.csv")
     saveWithOverwrite(algorithm2(rddFromFile), "src/main/resources/algorithm2.csv")
