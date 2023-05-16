@@ -7,8 +7,8 @@ object TupleFileReader {
   private val CommaPattern = """\s*(\d+),\s*(\d+)\s*""".r
   private val TabPattern = """\s*(\d+)\t\s*(\d+)\s*""".r
 
-  def read(inputFile: String)(implicit spark: SparkSession) =
-    spark.sparkContext.textFile(inputFile).map {
+  def read(inputDirectory: String)(implicit spark: SparkSession) =
+    spark.sparkContext.textFile(s"${inputDirectory}/*").map {
       case CommaPattern(num1, num2) => Some((num1.toInt, num2.toInt))
       case TabPattern(num1, num2) => Some((num1.toInt, num2.toInt))
       case HeaderTabPattern(_, _) => None

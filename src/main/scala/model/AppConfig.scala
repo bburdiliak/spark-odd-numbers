@@ -18,11 +18,13 @@ object AppConfig {
 
       for {
         inputPath <- Try(Paths.get(args(0))).fold(e => Left(s"Invalid input path - ${e.getMessage}"), Right(_))
+        inputDirectory <- Either.cond(Files.isDirectory(inputPath), inputPath, "Input path is not a directory")
+
         outputPath <- Try(Paths.get(args(1))).fold(e => Left(s"Invalid output path - ${e.getMessage}"), Right(_))
         outputDirectory <- Option(outputPath.getParent).toRight("Invalid output path")
         _ = if (!outputDirectory.toFile.exists()) Files.createDirectories(outputDirectory)
         algorithm <- Algorithm(args(2)).toRight("Invalid algorithm")
-      } yield AppConfig(inputPath, outputPath, algorithm)
+      } yield AppConfig(inputDirectory, outputPath, algorithm)
     }
   }
 

@@ -18,8 +18,7 @@ class MainTest extends AnyFunSuite with BeforeAndAfterAll with PrivateMethodTest
       .appName("OddNumberIdentifier")
       .getOrCreate()
     rdd = {
-      println(session)
-      TupleFileReader.read("src/test/resources/input/text01.txt")(session)
+      TupleFileReader.read("src/test/resources/input")(session)
     }
   }
 
