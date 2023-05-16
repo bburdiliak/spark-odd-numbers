@@ -1,10 +1,11 @@
+import model.Algorithm._
+import org.apache.spark.SparkConf
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.{SparkConf, SparkContext}
-import org.scalatest.BeforeAndAfterAll
 import org.scalatest.funsuite.AnyFunSuite
+import org.scalatest.{BeforeAndAfterAll, PrivateMethodTester}
 
-class MainTest extends AnyFunSuite with BeforeAndAfterAll {
+class MainTest extends AnyFunSuite with BeforeAndAfterAll with PrivateMethodTester {
 
   private var sparkConf: SparkConf = _
   private var session: SparkSession = _
@@ -18,7 +19,7 @@ class MainTest extends AnyFunSuite with BeforeAndAfterAll {
       .getOrCreate()
     rdd = {
       println(session)
-      Main.rddFromFile(session)
+      TupleFileReader.read("src/test/resources/input/text01.txt")(session)
     }
   }
 
@@ -32,15 +33,15 @@ class MainTest extends AnyFunSuite with BeforeAndAfterAll {
   }
 
   test("get odd numbers with algorithm1") {
-    testOdds(Main.algorithm1(rdd).collect().toMap)
+    testOdds(Xor.run(rdd).collect().toMap)
   }
 
   test("get odd numbers with algorithm2") {
-    testOdds(Main.algorithm2(rdd).collect().toMap)
+    testOdds(AggregateWithMap.run(rdd).collect().toMap)
   }
 
   test("get odd numbers with algorithm3") {
-    testOdds(Main.algorithm3(rdd).collect().toMap)
+    testOdds(GroupAndFilter.run(rdd).collect().toMap)
   }
 
   override def afterAll() {
